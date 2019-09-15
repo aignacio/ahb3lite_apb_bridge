@@ -49,16 +49,16 @@
 //  PDATA_SIZE        1+       APB Data bus size        8       bits
 //  SYNC_DEPTH        1+       CDC sync stages          3       stages
 // ------------------------------------------------------------------
-// REUSE ISSUES 
+// REUSE ISSUES
 //   Reset Strategy      : external asynchronous active low; HRESETn
 //   Clock Domains       : HCLK, rising edge
-//   Critical Timing     : 
+//   Critical Timing     :
 //   Test Features       : na
 //   Asynchronous I/F    : no
 //   Scan Methodology    : na
 //   Instantiations      : none
 //   Synthesizable (y/n) : Yes
-//   Other               :                                         
+//   Other               :
 // -FHDR-------------------------------------------------------------
 
 module ahb3lite_apb_bridge #(
@@ -220,7 +220,7 @@ module ahb3lite_apb_bridge #(
     input [2:0] hsize;
 
     case (hsize)
-       HSIZE_B1024: apb_beats = 1023/PDATA_SIZE; 
+       HSIZE_B1024: apb_beats = 1023/PDATA_SIZE;
        HSIZE_B512 : apb_beats =  511/PDATA_SIZE;
        HSIZE_B256 : apb_beats =  255/PDATA_SIZE;
        HSIZE_B128 : apb_beats =  127/PDATA_SIZE;
@@ -237,7 +237,7 @@ module ahb3lite_apb_bridge #(
 
     //Which bits in HADDR should be taken into account?
     case (data_size)
-          1024: address_mask = 7'b111_1111; 
+          1024: address_mask = 7'b111_1111;
            512: address_mask = 7'b011_1111;
            256: address_mask = 7'b001_1111;
            128: address_mask = 7'b000_1111;
@@ -269,8 +269,8 @@ module ahb3lite_apb_bridge #(
 
     //get number of active lanes for a 1024bit databus (max width) for this HSIZE
     case (hsize)
-       HSIZE_B1024: full_pstrb = 'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff; 
-       HSIZE_B512 : full_pstrb = 'hffff_ffff_ffff_ffff;
+       HSIZE_B1024: full_pstrb = 128'hffff_ffff_ffff_ffff_ffff_ffff_ffff_ffff;
+       HSIZE_B512 : full_pstrb = 64'hffff_ffff_ffff_ffff;
        HSIZE_B256 : full_pstrb = 'hffff_ffff;
        HSIZE_B128 : full_pstrb = 'hffff;
        HSIZE_DWORD: full_pstrb = 'hff;
@@ -346,7 +346,7 @@ module ahb3lite_apb_bridge #(
                 */
 
                //assign read data
-               HRDATA <= apb_prdata; 
+               HRDATA <= apb_prdata;
 
                //indicate transfer done. Normally HREADYOUT = '1', HRESP=OKAY
                //HRESP=ERROR requires 2 cycles
